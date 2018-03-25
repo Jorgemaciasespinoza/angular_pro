@@ -1,0 +1,98 @@
+<!-- login page -->
+<div class="page-wrapper flex-row align-items-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-5">
+                <!-- card -->
+                <div class="card p-4">
+
+                  <!-- header card -->
+                  <div class="card-header text-center text-uppercase h4 font-weight-light">
+                    Login
+                  </div>
+                  <!-- end header card -->
+
+                  <!-- form login -->
+                  <form ngNativeValidate #f="ngForm" (ngSubmit)="ingresar( f )">
+
+                    <!-- body card -->
+                    <div class="card-body py-5">
+                        <div class="form-group">
+                            <label class="form-control-label">Email</label>
+                            <input [ngModel]="email" name="email" class="form-control" type="email" required placeholder="Correo del usuario">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-control-label">Password</label>
+                            <input ngModel name="password" class="form-control" type="password" required placeholder="Contraseña">
+                        </div>
+
+                        <div class="custom-control custom-checkbox mt-4">
+                            <input type="checkbox" class="custom-control-input" id="login" [(ngModel)]="recuerdame" name="recuerdame" >
+                            <label class="custom-control-label" for="login">Recúerdame</label>
+                        </div>
+
+                        <br>
+                        <br>
+
+                        <div class="row">
+
+                          <div class="col-12">
+                            <button  type="submit" class="btn btn-primary btn-block">
+                                 <i class="fas fa-sign-in-alt"></i> Login
+                            </button>
+                          </div>
+
+                        </div>
+
+                    </div>
+                    <!-- end body card -->
+
+                  </form>
+                  <!-- end form -->
+
+                  <!-- footer card -->
+                  <div class="card-footer">
+                    <!-- Boton de Google -->
+                    <div class="row">
+
+                      <div class="col-4 text-center">
+                        <button id="btnGoogle" class="btn btn-danger btn-block">
+                         <i class="fab fa-google"></i>
+                        </button>
+
+                      </div>
+
+                    </div>
+                    <!-- end boton de Google -->
+
+                  </div>
+                  <!-- end footer card   -->
+
+
+
+                  <!-- Adiccionales recuperar contraseña y registrarse -->
+
+                  <hr>
+                  <div class="row">
+
+                    <div class="col-6">
+                      <a href="#" class="btn btn-link">Olvide mi contraseña</a>
+                    </div>
+
+                    <div class="col-6">
+                      <a (click)="registrar()" class="btn btn-link">Registrate</a>
+                    </div>
+
+                    <!-- end adiccionales recuperar contraseña y registrarse -->
+                  </div>
+
+                </div>
+                <!-- end card -->
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
