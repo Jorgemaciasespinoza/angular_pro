@@ -5,7 +5,8 @@
     </a>
 
     <a class="navbar-brand" href="#">
-        <img src="assets/imgs/logo.png" alt="logo">
+        <img src="assets/imgs/gema.jpg" alt="logo" height="42" width="42">
+        Gema-Soft
     </a>
 
     <a href="#" class="btn btn-link sidebar-toggle d-md-down-none">
@@ -29,30 +30,22 @@
 
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <img src="assets/imgs/avatar-1.png" class="avatar avatar-sm" alt="logo">
-                <span class="small ml-1 d-md-down-none">John Smith</span>
+                <img [src]="usuario.img | imagen " class="avatar avatar-sm" alt="logo">
+                <span class="small ml-1 d-md-down-none">{{ usuario.nombre  }}</span>
             </a>
 
             <div class="dropdown-menu dropdown-menu-right">
-                <div class="dropdown-header">Account</div>
+                <div class="dropdown-header">Cuenta</div>
 
-                <a href="#" class="dropdown-item">
-                    <i class="fa fa-user"></i> Profile
+                <a routerLink="/profile/settings-account" class="dropdown-item">
+                    <i class="fa fa-user"></i> Configuración
                 </a>
 
-                <a href="#" class="dropdown-item">
-                    <i class="fa fa-envelope"></i> Messages
+                <a routerLink="/profile/image-profile" class="dropdown-item">
+                    <i class="fa fa-image"></i> Cambiar imagen
                 </a>
 
                 <div class="dropdown-header">Settings</div>
-
-                <a href="#" class="dropdown-item">
-                    <i class="fa fa-bell"></i> Notifications
-                </a>
-
-                <a href="#" class="dropdown-item">
-                    <i class="fa fa-wrench"></i> Settings
-                </a>
 
                 <a (click)="_usuarioService.logout()" class="dropdown-item pointer">
                     <i class="fa fa-lock"></i> Logout

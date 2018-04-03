@@ -94,4 +94,8 @@ export class LoginComponent implements OnInit {
                   .subscribe( correcto => this.router.navigate(['/dashboard'])  );
   }
 
+  forgot(){
+    this.router.navigate(['/forgot']);
+  }
+
 }

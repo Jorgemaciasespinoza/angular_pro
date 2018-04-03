@@ -32,14 +32,6 @@ export class RegisterComponent implements OnInit {
       password: new FormControl( null , Validators.required ),
       password2: new FormControl( null , Validators.required )
     }, { validators: this.sonIguales( 'password', 'password2' )  } );
-
-    // CARGAR VALORES POR DEFECTO
-    // this.forma.setValue({
-    //   nombre: 'Test ',
-    //   correo: 'test@test.com',
-    //   password: '123456',
-    //   password2: '123456'
-    // });
   }
 
 

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Usuario } from '../../models/usuario.model';
 import { HttpClient } from '@angular/common/http';
 import { URL_SERVICIOS } from '../../config/config';
-
+import { SubirArchivoService } from '../subirArchivo/subir-archivo.service';
 
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
@@ -19,7 +19,10 @@ export class UsuarioService {
   usuario: Usuario;
   token: string;
 
-  constructor( public http: HttpClient, public router: Router) {
+  constructor(
+    public http: HttpClient,
+    public router: Router,
+    public _subirArchivoService: SubirArchivoService) {
     this.cargarStorage();
   }
 
@@ -128,5 +131,77 @@ export class UsuarioService {
     this.router.navigate(['/login']);
   }
 
+
+  // FUNCION QUE INVOCA AL SERVICIO ACTUALIZAR LA CONTRASEÑA
+  actualizarPassword( password: string, token: string) {
+
+    var objeto: any =  { password: password };
+
+    let url = URL_SERVICIOS + '/login/change-password?token='+token;
+    return this.http.post( url, objeto )
+                .map( (resp: any) => {
+                      swal('Contraseña actualizada', 'Se actualizo correctamente la contraseña', 'success');
+                  return true;
+                }).catch( err => {
+                  swal('Error', err.error.mensaje, 'error');
+                  this.router.navigate(['/login']);
+                  return Observable.throw ( err );
+
+                });
+  }
+
+  // FUNCION QUE INVOCA AL SERVICIO PARA ENVIAR INSTRUCCIONES PARA RECUPERAR LA CONTRASEÑA
+  forgotPassword( correo: string) {
+
+    var objeto: any =  { email: correo };
+
+    let url = URL_SERVICIOS + '/login/forgot-password';
+    return this.http.post( url, objeto )
+                .map( (resp: any) => {
+                      swal('Actualizar contraseña',
+                      'Se han enviado las instrucciones a su correo para restablecer su contraseña', 'success');
+                  return true;
+                }).catch( err => {
+                  swal('Error', err.error.mensaje, 'error');
+
+                  return Observable.throw ( err );
+
+                });
+  }
+
+
+  actualizarUsuario( usuario: Usuario ){
+      let url = URL_SERVICIOS + '/usuario/'+ usuario._id + '?token='+this.token;
+
+      return this.http.put( url, usuario )
+      .map( (resp: any) => {
+
+            let usuarioLocal: Usuario = resp.usuario;
+            this.guardarStorage( usuarioLocal._id, this.token, usuarioLocal);
+            swal('Actualizar usuario',
+            'Se actualizo el usuario correctamente', 'success');
+            return true;
+
+      }).catch( err => {
+        swal('Error', err.error.mensaje, 'error');
+
+        return Observable.throw ( err );
+
+      });
+
+  }
+
+  cambiarImagen(archivo: File, id: string){
+    this._subirArchivoService.subirArchivo(archivo, 'usuarios', id)
+    .then( ( resp: any ) =>{
+      this.usuario.img = resp.usuario.img;
+      this.guardarStorage(id, this.token, this.usuario);
+      swal('Imagen',
+      'Se actualizo correctamente la imagen', 'success');
+    }).catch( resp =>{
+      swal('Imagen',
+      'Ocurrio un error al actualizar la imagen', 'error');
+    });
+  }
 
 }

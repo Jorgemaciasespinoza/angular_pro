@@ -6,6 +6,9 @@ import { AppComponent } from './app.component';
 
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './login/register.component';
+import { ForgotComponent } from './login/forgot.component';
+import { PasswordResetComponent } from './login/password-reset.component';
+
 
 // RUTAS
 import { APP_ROUTES  } from './app.routes';
@@ -17,12 +20,13 @@ import { PagesModule } from './pages/pages.module';
 import { ServiceModule } from './services/service.module';
 
 
-
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    ForgotComponent,
+    PasswordResetComponent
   ],
   imports: [
     BrowserModule,

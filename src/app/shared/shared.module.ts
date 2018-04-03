@@ -12,11 +12,15 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 // MODULO DE SERVICIOS
 import { ServiceModule } from '../services/service.module';
 
+// PIPES
+import { PipesModule } from '../pipes/pipes.module';
+
 @NgModule({
   imports: [
     RouterModule,
     ServiceModule,
-    CommonModule
+    CommonModule,
+    PipesModule
   ],
   declarations: [
     HeaderComponent,
