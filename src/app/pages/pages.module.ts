@@ -12,6 +12,7 @@ import { GraficasComponent } from './graficas/graficas.component';
 import { ProfileComponent } from './profile/profile.component';
 import { SettingsAccountComponent } from './profile/settings-account/settings-account.component';
 import { ImageProfileComponent } from './profile/image-profile/image-profile.component';
+import { UsuariosComponent } from './usuarios/usuarios.component';
 
 
 // MODULOS IMPORTADOS
@@ -30,10 +31,10 @@ import { PipesModule } from '../pipes/pipes.module';
     PagesComponent,
     DashboardComponent,
     GraficasComponent,
-
     ProfileComponent,
     SettingsAccountComponent,
-    ImageProfileComponent
+    ImageProfileComponent,
+    UsuariosComponent
   ],
   exports: [
     PagesComponent,

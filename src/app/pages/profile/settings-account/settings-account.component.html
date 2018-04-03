@@ -4,66 +4,83 @@
     </div>
 
     <form ngNativeValidator #f="ngForm" (ngSubmit)="guardarPerfil(  f.value  )" action="" method="post">
-    <div class="card-body">
-        <div class="row mb-5">
-            <div class="col-md-4 mb-4">
-                <div>Información de perfil</div>
-                <div class="text-muted small">Si accesaste a través de tu cuenta de Google no podrás modificar tu nombre o correo electrónico. Debes realizar estos cambio desde tu cuenta de Google (considera que solo podrás modificar tu nombre).</div>
-            </div>
+        <div class="card-body">
+            <div class="row mb-5">
+                <div class="col-md-4 mb-4">
+                    <div>Información de perfil</div>
+                    <div class="text-muted small">Si accesaste a través de tu cuenta de Google no podrás modificar tu nombre o correo electrónico. Debes realizar estos cambio desde tu cuenta de Google (considera que solo podrás modificar tu nombre).</div>
+                </div>
 
-            <div class="col-md-8">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-6">
+
                             <label class="form-control-label">Nombre</label>
-                            <input [ngModel]="usuario.nombre" name="nombre" class="form-control" required>
-                        </div>
-                    </div>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-user"></i></span>
+                                </div>
+                                <input [ngModel]="usuario.nombre" name="nombre" class="form-control" required>
+                            </div>
 
-                    <div class="col-md-6">
-                        <div class="form-group">
+                        </div>
+
+
+
+                        <div class="col-md-6">
                             <label class="form-control-label">Correo electrónico</label>
-                            <input [ngModel]="usuario.email" [disabled]="usuario.google" name="email" class="form-control" required>
+                            <div class="input-group mb-3">
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fa fa-envelope"></i></span>
+                                </div>
+                                <input [ngModel]="usuario.email" [disabled]="usuario.google" name="email" class="form-control" required>
+                            </div>
                         </div>
+
                     </div>
+
+
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="row mt-5">
+                <div class="col-md-4 mb-4">
+                    <div>Credenciales</div>
+                    <div class="text-muted small">Si no desea cambiar su contraseña deje los campos vacíos.</div>
                 </div>
 
-
-            </div>
-        </div>
-
-      <hr>
-
-        <div class="row mt-5">
-            <div class="col-md-4 mb-4">
-                <div>Credenciales</div>
-                <div class="text-muted small">Si no desea cambiar su contraseña deje los campos vacíos.</div>
-            </div>
-
-            <div class="col-md-8">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-6">
                             <label class="form-control-label">Contraseña</label>
-                            <input type="password" class="form-control">
+                            <div class="input-group mb-3">
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fa fa-lock"></i></span>
+                                </div>
+                                <input type="password" class="form-control">
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="col-md-6">
-                        <div class="form-group">
+                        <div class="col-md-6">
                             <label class="form-control-label">Confirmar contraseña</label>
-                            <input type="password" class="form-control">
+                            <div class="input-group mb-3">
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fa fa-lock"></i></span>
+                                </div>
+                                <input type="password" class="form-control">
+                            </div>
                         </div>
                     </div>
+
+
                 </div>
-
-
             </div>
         </div>
-    </div>
 
-    <div class="card-footer bg-light text-right">
-        <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Guardar cambios</button>
-    </div>
-  </form>
+        <div class="card-footer bg-light text-right">
+            <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Guardar cambios</button>
+        </div>
+    </form>
 </div>

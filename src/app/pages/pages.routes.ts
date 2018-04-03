@@ -11,6 +11,8 @@ import { ProfileComponent } from './profile/profile.component';
 
 import { SettingsAccountComponent } from './profile/settings-account/settings-account.component';
 import { ImageProfileComponent } from './profile/image-profile/image-profile.component';
+import { UsuariosComponent } from './usuarios/usuarios.component';
+
 
 const pagesRoutes: Routes = [
   {
@@ -30,7 +32,9 @@ const pagesRoutes: Routes = [
           { path: '', redirectTo: 'settings-account', pathMatch: 'full' }
         ]
       },
-      { path: '', redirectTo: '/dashboard', pathMatch: 'full' }
+      { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+      // Mantenimientos
+      { path: 'usuarios', component: UsuariosComponent }
     ]
   }
 ];
