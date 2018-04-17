@@ -2,7 +2,7 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <h5>Usuarios</h5>
+                <!-- <h5>Usuarios</h5> -->
 
             </div>
 
@@ -13,66 +13,80 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="normal-input" class="form-control-label">Busqueda de usuarios</label>
-                                <input id="normal-input" class="form-control" value="Input value">
+                                <!-- <label for="normal-input" class="form-control-label">Busqueda de usuarios</label> -->
+                                <input #input (keyup)="buscarUsuario( input.value )" id="normal-input" class="form-control" placeholder="Usuarios">
                             </div>
 
+                            <div class="row" *ngIf="cargando">
+                                <div class="col-sm-12">
+                                    <div class="text-center">
+                                        <strong>Cargando...</strong>
+                                        <br>
+                                        <br>
+                                        <i class="fas fa-spinner fa-spin fa-3x"></i>
+                                        <br>
+                                        <br>
+                                        <span>Espere por favor</span>
+                                    </div>
+                                </div>
+                            </div>
 
-                            <div class="table-responsive">
+                            <div class="table-responsive" *ngIf="!cargando">
+                                <h6>Usuarios registrados (<small>  {{ actual }} de {{ totalRegistros }} </small>)</h6>
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
-                                            <th>Name</th>
-                                            <th>Sales</th>
-                                            <th>Price</th>
-                                            <th>Discount</th>
+                                            <th>Imagen</th>
+                                            <th>Correo</th>
+                                            <th>Nombre</th>
+                                            <th>Role</th>
+                                            <th>Auth</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td class="text-nowrap">Samsung Galaxy S8</td>
-                                            <td>31,589</td>
-                                            <td>$800</td>
-                                            <td>5%</td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td class="text-nowrap">Google Pixel XL</td>
-                                            <td>99,542</td>
-                                            <td>$750</td>
-                                            <td>3%</td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td class="text-nowrap">iPhone X</td>
-                                            <td>62,220</td>
-                                            <td>$1,200</td>
-                                            <td>0%</td>
-                                        </tr>
-                                        <tr>
-                                            <td>4</td>
-                                            <td class="text-nowrap">OnePlus 5T</td>
-                                            <td>50,000</td>
-                                            <td>$650</td>
-                                            <td>5%</td>
-                                        </tr>
-                                        <tr>
-                                            <td>5</td>
-                                            <td class="text-nowrap">Google Nexus 6</td>
-                                            <td>400</td>
-                                            <td>$400</td>
-                                            <td>7%</td>
+                                        <tr *ngFor="let usuario of usuarios">
+                                            <td class="w70">
+                                                <img (click)="mostrarModal( usuario._id )" [src]="usuario.img | imagen" class="img-50 img-thumbnail pointer">
+                                            </td>
+                                            <td class="text-nowrap">{{ usuario.email }}</td>
+                                            <td>{{ usuario.nombre }}</td>
+                                            <td>
+
+                                                <select [(ngModel)]="usuario.role" class="form-control" name="role">
+                                          <option value="ADMIN_ROLE">ADMIN_ROLE</option>
+                                          <option value="USER_ROLE">USER_ROLE</option>
+                                        </select>
+
+                                            </td>
+                                            <td>
+                                                <span *ngIf="usuario.google" class="badge badge-danger">Google</span>
+                                                <span *ngIf="!usuario.google" class="badge badge-info">Normal</span>
+                                            </td>
+                                            <td>
+                                                <button (click)="guardarUsuario( usuario )" type="button" name="button" class="btn btn-primary">
+                                          <i class="fa fa-save"></i>
+                                        </button>
+                                                <button (click)="borrarUsuario( usuario )" type="button" name="button" class="btn btn-danger">
+                                          <i class="fas fa-trash-alt"></i>
+                                        </button>
+
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
+                                <br>
+                                <button (click)="cambiarDesde(-5)" type="button" class="btn btn-outline-secondary">Anteriores</button>
+                                <button (click)="cambiarDesde(5)" type="button" class="btn btn-outline-primary">Siguientes</button>
                             </div>
-                        </div>
 
+                        </div>
+                        <!-- end col-md-12 -->
                     </div>
 
                 </div>
+
             </div>
         </div>
     </div>
+</div>

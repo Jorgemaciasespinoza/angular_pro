@@ -176,11 +176,14 @@ export class UsuarioService {
       return this.http.put( url, usuario )
       .map( (resp: any) => {
 
-            let usuarioLocal: Usuario = resp.usuario;
-            this.guardarStorage( usuarioLocal._id, this.token, usuarioLocal);
+            if ( usuario._id === this.usuario._id){
+              let usuarioLocal: Usuario = resp.usuario;
+              this.guardarStorage( usuarioLocal._id, this.token, usuarioLocal);
+            }
+
             swal('Actualizar usuario',
             'Se actualizo el usuario correctamente', 'success');
-            return true;
+            return resp;
 
       }).catch( err => {
         swal('Error', err.error.mensaje, 'error');
@@ -201,6 +204,26 @@ export class UsuarioService {
     }).catch( resp =>{
       swal('Imagen',
       'Ocurrio un error al actualizar la imagen', 'error');
+    });
+  }
+
+  cargarUsuarios(desde: number =0){
+    let url = URL_SERVICIOS + '/usuario?desde='+desde+ '&token='+this.token;
+    return this.http.get( url );
+  }
+
+  buscarUsuarios(termino: string){
+
+    let url = URL_SERVICIOS + '/usuario/busqueda/'+termino+'?token='+this.token;
+    return this.http.get( url );
+  }
+
+  borrarUsuario(id: string){
+    let url = URL_SERVICIOS + '/usuario/'+id+'?token='+this.token;
+    return this.http.delete( url )
+    .map( resp => {
+      swal('Usuario eliminado', 'El usuario se elimino correctamente', 'success');
+      return true;
     });
   }
 

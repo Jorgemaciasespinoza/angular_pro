@@ -5,13 +5,14 @@ import { PagesComponent } from './pages.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { GraficasComponent } from './graficas/graficas.component';
 
-import { LoginGuardGuard } from '../services/service.index';
+import { LoginGuardGuard, AdminGuard } from '../services/service.index';
 
 import { ProfileComponent } from './profile/profile.component';
 
 import { SettingsAccountComponent } from './profile/settings-account/settings-account.component';
 import { ImageProfileComponent } from './profile/image-profile/image-profile.component';
 import { UsuariosComponent } from './usuarios/usuarios.component';
+
 
 
 const pagesRoutes: Routes = [
@@ -25,7 +26,6 @@ const pagesRoutes: Routes = [
       {
         path: 'profile',
         component: ProfileComponent,
-        canActivate: [ LoginGuardGuard ],
         children: [
           { path: 'settings-account', component: SettingsAccountComponent },
           { path: 'image-profile', component: ImageProfileComponent },
@@ -34,7 +34,11 @@ const pagesRoutes: Routes = [
       },
       { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
       // Mantenimientos
-      { path: 'usuarios', component: UsuariosComponent }
+      { 
+        path: 'usuarios',
+        component: UsuariosComponent,
+        canActivate: [ AdminGuard ]
+      }
     ]
   }
 ];

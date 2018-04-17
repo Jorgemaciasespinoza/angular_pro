@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { FormsModule }   from '@angular/forms';
+import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { CommonModule }   from '@angular/common';
 
 // PAGINA PRINCIPAL CONTENEDORA
@@ -13,7 +13,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { SettingsAccountComponent } from './profile/settings-account/settings-account.component';
 import { ImageProfileComponent } from './profile/image-profile/image-profile.component';
 import { UsuariosComponent } from './usuarios/usuarios.component';
-
+import { ModalUploadComponent } from '../components/modal-upload/modal-upload.component';
 
 // MODULOS IMPORTADOS
 import { SharedModule } from '../shared/shared.module';
@@ -34,7 +34,8 @@ import { PipesModule } from '../pipes/pipes.module';
     ProfileComponent,
     SettingsAccountComponent,
     ImageProfileComponent,
-    UsuariosComponent
+    UsuariosComponent,
+    ModalUploadComponent
   ],
   exports: [
     PagesComponent,
@@ -50,6 +51,7 @@ import { PipesModule } from '../pipes/pipes.module';
     PAGES_ROUTES,
     PipesModule,
     FormsModule,
+    ReactiveFormsModule,
     CommonModule
   ]
 })
