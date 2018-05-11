@@ -1,8 +1,16 @@
+// ==================================================
+//  OPERACIONES PARA EL MANEJO DE USUARIOS
+//  LOGIN.COMPONENT.TS
+//  Ultima actualización: 18/04/2018
+//  Autor: Jorge Macías
+// ==================================================
+
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 
 import { Usuario } from '../models/usuario.model';
+
 import { UsuarioService } from '../services/service.index';
 
 
@@ -17,7 +25,6 @@ export class LoginComponent implements OnInit {
 
   recuerdame: Boolean = false;
   email: string;
-
   auth2: any;
 
   constructor(
@@ -38,7 +45,6 @@ export class LoginComponent implements OnInit {
       this.recuerdame = true;
     }
 
-
   }
 
   // INICIALIZAR LOS PARAMETROS NECESARIOS PARA LA AUTENTICACION CON GOOGLE
@@ -47,7 +53,7 @@ export class LoginComponent implements OnInit {
     gapi.load('auth2', () => {
 
       this.auth2 = gapi.auth2.init({
-        client_id: '442737206823-dilej5tevnrv61sovd7bocf5qeafmjs3.apps.googleusercontent.com',
+        client_id: '127715151090-up0f8m1egl3grh28hqbhcib5t3367gn3.apps.googleusercontent.com',
         cookiepolicy: 'single_host_origin',
         scope: 'profile email'
       });
@@ -58,17 +64,16 @@ export class LoginComponent implements OnInit {
 
   }
 
-
   attachSignin( element ) {
 
     this.auth2.attachClickHandler( element, {}, (googleUser) => {
 
-      // let profile = googleUser.getBasicProfile();
-      let token = googleUser.getAuthResponse().id_token;
+    // let profile = googleUser.getBasicProfile();
+    let token = googleUser.getAuthResponse().id_token;
 
-      this._usuarioService.loginGoogle( token )
+    this._usuarioService.loginGoogle( token )
+              // Especial es requerido el window.location.href para que no pieda la composicion
               .subscribe( () => window.location.href = '#/dashboard'  );
-
     });
 
   }
@@ -86,7 +91,7 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    // CREAMOS UN OBJETO TIPO USUARIO
+    // CREAMOS UN OBJETO TIPO USUARIO nombre, email, password
     let usuario = new Usuario(null, forma.value.email, forma.value.password );
 
     // SE INVOCA AL SERVICIO LOGIN Y REDIRECCIONA AL dashboard

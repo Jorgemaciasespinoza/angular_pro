@@ -1,14 +1,34 @@
+// ==================================================
+// NOMBRE ARCHIVO: usuario.service.ts
+// DESCRIPCION: operaciones con usuarios
+// AUTOR: Jorge Macias
+// ULTIMA ACTUALIZACION: 18/04/2018
+// ==================================================
+
+
+// ==================================================
+// IMPORTS
+// ==================================================
 import { Injectable } from '@angular/core';
 
+// Modelo usuario
 import { Usuario } from '../../models/usuario.model';
+
+// Http para hacer peticiones al backend
 import { HttpClient } from '@angular/common/http';
+
+// Url de los servicios
 import { URL_SERVICIOS } from '../../config/config';
+
+// Servicio para subir archivos
 import { SubirArchivoService } from '../subirArchivo/subir-archivo.service';
 
+// Opreador map, catch, throw
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 
+// Router para navegar entre rutas
 import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs/Observable';
@@ -16,110 +36,146 @@ import { Observable } from 'rxjs/Observable';
 @Injectable()
 export class UsuarioService {
 
+  // Usuario firmado
   usuario: Usuario;
+
+  // Token del usuario firmado
   token: string;
+
+  // Menu del usuario firmado
+  menu = [];
 
   constructor(
     public http: HttpClient,
     public router: Router,
     public _subirArchivoService: SubirArchivoService) {
+    // Para obtener los datos del usuario en caso de que ya este firmado
     this.cargarStorage();
   }
 
-  // FUNCION QUE INVOCA AL SERVICIO PARA CREAR UN USUARIO
-  crearUsuario( usuario: Usuario ) {
+  // ==================================================
+  // FUNCION PARA RENOVAR EL TOKEN
+  // ==================================================
+  renuevaToken(){
+    let url = URL_SERVICIOS + '/login/renuevaToken';
+    url +=  '?token=' + this.token;
+    return this.http.get( url )
+    .map( (resp: any) => {
 
-    let url = URL_SERVICIOS + '/usuario';
+      this.token = resp.token;
+      localStorage.setItem('token', this.token);
+      console.log('Token renovado');
+      return true;
 
-    return this.http.post( url, usuario )
-              .map( (resp: any) => {
+      // swal('Usuario eliminado', 'El usuario se elimino correctamente', 'success');
+    })
+    .catch( err => {
 
-                swal('Usuario creado', usuario.email, 'success' );
-                return resp.usuario;
+      this.router.navigate(['/login']);
+      swal('No se pudo renovar token', 'No fue posible renovar tus credenciales', 'error');
+      return Observable.throw ( err );
 
-              }).catch( err => {
-
-
-                swal(err.error.mensaje, err.error.errors.message, 'error');
-                return Observable.throw ( err );
-
-              });
+    });
   }
 
-  // FUNCION QUE INVOCA AL SERVICIO PARA AUTENTICAR USUARIO
+
+  // ==================================================
+  // FUNCION PARA LOGEAR USUARIO CON METODO TRADICIONAL
+  // ==================================================
   login( usuario: Usuario, recordar: boolean = false ) {
 
-    // SI SE MARCA LA CASILLA RECORDAR SE GRABA EL EMAIL EN EL LOCALSTORAGE
+    // Si se marca el check para recordar correo electronico
     if ( recordar ) {
-      localStorage.setItem('email', usuario.email );
+      localStorage.setItem('email', usuario.email ); // calve, valor
     }
-    // SI NO FUE MARCADA LA CISILLA SE ELIMINA DEL LOCALSTORAGE
+    // Si no se marca elimina el correo del localStorage
     else {
       localStorage.removeItem('email');
     }
 
+    // se establece la uri del servicio
     let url = URL_SERVICIOS + '/login';
+
     return this.http.post( url, usuario )
-                .map( (resp: any) => {
+                    .map( (resp: any) => {
 
-                  this.guardarStorage( resp.id, resp.token, resp.usuario );
+                      this.guardarStorage( resp.id, resp.token, resp.usuario );
+                      return true;
 
-                  return true;
-                }).catch( err => {
+                    }).catch( err => {
 
+                      // Se maneja el error, si algo sucede
+                      swal('Error', err.error.mensajeUsuario, 'error');
+                      return Observable.throw ( err );
 
-                  swal('Error', err.error.mensaje, 'error');
-                  return Observable.throw ( err );
-
-                });
-
+                    });
   }
 
-  // FUNCION PARA GUARDAR EN EL LOCALSTORAGE
-  guardarStorage( id: string, token: string, usuario: Usuario ) {
 
-    localStorage.setItem('id', id );
-    localStorage.setItem('token', token );
-    localStorage.setItem('usuario', JSON.stringify(usuario) );
+  // ==================================================
+  // FUNCION PARA LOGEAR USUARIO A TRAVES DE GOOGLE
+  // ==================================================
+    loginGoogle( token: string ) {
 
-    this.usuario = usuario;
-    this.token = token;
-  }
+      let url = URL_SERVICIOS + '/login/google';
 
-  // FUNCION QUE INVOCA AL SERVICIO DE AUTENTICACION CON GOOGLE
-  loginGoogle( token: string ) {
+      return this.http.post( url, { token } )
+                      .map( (resp: any) => {
 
-    let url = URL_SERVICIOS + '/login/google';
+                        this.guardarStorage( resp.id, resp.token, resp.usuario );
+                        return true;
+                      }).catch( err => {
 
-    return this.http.post( url, { token } )
-                .map( (resp: any) => {
-                  this.guardarStorage( resp.id, resp.token, resp.usuario );
-                  return true;
-                });
+                        swal('Error', err.error.mensajeUsuario, 'error');
+                        return Observable.throw ( err );
+
+                      });
+    }
 
 
-  }
+  // ==================================================
+  // FUNCION PARA GUARDAR USUARIO EN localStorage
+  // ==================================================
+    guardarStorage( id: string, token: string, usuario: Usuario ) {
 
+      localStorage.setItem('token', token );
+
+      // Obtiene los datos del usuario en memoria
+      this.usuario = usuario;
+      this.token = token;
+
+      this.menu = JSON.parse( atob(this.token.split('.')[1])  ).menu;
+    }
+
+
+  // ==================================================
   // FUNCION PARA VERIFICAR SI EL USUARIO ESTA LOGEADO
+  // ==================================================
   estaLogueado() {
     return ( this.token.length > 5 ) ? true : false;
   }
 
+  // ==================================================
   // FUNCION PARA CARGAR DEL STORAGE EL TOKEN Y EL USUARIO
+  // ==================================================
   cargarStorage() {
 
     if ( localStorage.getItem('token')) {
       this.token = localStorage.getItem('token');
-      this.usuario = JSON.parse( localStorage.getItem('usuario') );
+      this.usuario = JSON.parse( atob(this.token.split('.')[1])  ).usuario;
+      this.menu = JSON.parse( atob(this.token.split('.')[1])  ).menu;
     } else {
       this.token = '';
       this.usuario = null;
+      this.menu = [];
     }
 
   }
 
 
+  // ==================================================
   // FUNCION PARA CERRAR LA SESION
+  // ==================================================
   logout() {
     this.usuario = null;
     this.token = '';
@@ -132,25 +188,32 @@ export class UsuarioService {
   }
 
 
-  // FUNCION QUE INVOCA AL SERVICIO ACTUALIZAR LA CONTRASEÑA
-  actualizarPassword( password: string, token: string) {
+  // ==================================================
+  // FUNCION PARA REGISTRAR UN USUARIO
+  // ==================================================
+    crearUsuario( usuario: Usuario ) {
 
-    var objeto: any =  { password: password };
+      let url = URL_SERVICIOS + '/usuario';
 
-    let url = URL_SERVICIOS + '/login/change-password?token='+token;
-    return this.http.post( url, objeto )
-                .map( (resp: any) => {
-                      swal('Contraseña actualizada', 'Se actualizo correctamente la contraseña', 'success');
-                  return true;
-                }).catch( err => {
-                  swal('Error', err.error.mensaje, 'error');
-                  this.router.navigate(['/login']);
-                  return Observable.throw ( err );
+      return this.http.post( url, usuario )
+                      .map( (resp: any) => {
 
-                });
-  }
+                        swal('Usuario creado', usuario.email, 'success' );
+                        return resp.usuario;
 
+                      }).catch( err => {
+
+                        swal('Error', err.error.mensajeUsuario, 'error');
+                        return Observable.throw ( err );
+
+                      });
+    }
+
+
+
+  // ==================================================
   // FUNCION QUE INVOCA AL SERVICIO PARA ENVIAR INSTRUCCIONES PARA RECUPERAR LA CONTRASEÑA
+  // ==================================================
   forgotPassword( correo: string) {
 
     var objeto: any =  { email: correo };
@@ -162,8 +225,28 @@ export class UsuarioService {
                       'Se han enviado las instrucciones a su correo para restablecer su contraseña', 'success');
                   return true;
                 }).catch( err => {
-                  swal('Error', err.error.mensaje, 'error');
 
+                  swal('Error', err.error.mensajeUsuario, 'error');
+                  return Observable.throw ( err );
+
+                });
+  }
+
+  // ==================================================
+  // FUNCION QUE INVOCA AL SERVICIO ACTUALIZAR LA CONTRASEÑA
+  // ==================================================
+  actualizarPassword( password: string, token: string) {
+
+    var objeto: any =  { password: password };
+
+    let url = URL_SERVICIOS + '/login/change-password?token='+token;
+    return this.http.post( url, objeto )
+                .map( (resp: any) => {
+                      swal('Contraseña actualizada', 'Se actualizo correctamente la contraseña', 'success');
+                  return true;
+                }).catch( err => {
+                  swal('Error', err.error.mensajeUsuario, 'error');
+                  this.router.navigate(['/login']);
                   return Observable.throw ( err );
 
                 });
@@ -171,23 +254,21 @@ export class UsuarioService {
 
 
   actualizarUsuario( usuario: Usuario ){
-      let url = URL_SERVICIOS + '/usuario/'+ usuario._id + '?token='+this.token;
+      let url = URL_SERVICIOS + '/usuario/'+ usuario.pk_usuario + '?token='+this.token;
 
       return this.http.put( url, usuario )
       .map( (resp: any) => {
 
-            if ( usuario._id === this.usuario._id){
+            if ( usuario.pk_usuario === this.usuario.pk_usuario){
               let usuarioLocal: Usuario = resp.usuario;
-              this.guardarStorage( usuarioLocal._id, this.token, usuarioLocal);
+              this.guardarStorage( usuarioLocal.pk_usuario, this.token, usuarioLocal);
             }
 
-            swal('Actualizar usuario',
-            'Se actualizo el usuario correctamente', 'success');
+            swal('Actualizar usuario','Se actualizo el usuario correctamente', 'success');
             return resp;
 
       }).catch( err => {
-        swal('Error', err.error.mensaje, 'error');
-
+        swal('Error', err.error.mensajeUsuario, 'error');
         return Observable.throw ( err );
 
       });
@@ -197,13 +278,18 @@ export class UsuarioService {
   cambiarImagen(archivo: File, id: string){
     this._subirArchivoService.subirArchivo(archivo, 'usuarios', id)
     .then( ( resp: any ) =>{
-      this.usuario.img = resp.usuario.img;
+      console.log(resp);
+      this.usuario.imagen = resp.imagen;
       this.guardarStorage(id, this.token, this.usuario);
+
       swal('Imagen',
       'Se actualizo correctamente la imagen', 'success');
+
     }).catch( resp =>{
+
       swal('Imagen',
       'Ocurrio un error al actualizar la imagen', 'error');
+
     });
   }
 

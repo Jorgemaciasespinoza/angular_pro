@@ -47,21 +47,21 @@
                                     <tbody>
                                         <tr *ngFor="let usuario of usuarios">
                                             <td class="w70">
-                                                <img (click)="mostrarModal( usuario._id )" [src]="usuario.img | imagen" class="img-50 img-thumbnail pointer">
+                                                <img (click)="mostrarModal( usuario.pk_usuario )" [src]="usuario.imagen | imagen" class="img-50 img-thumbnail pointer">
                                             </td>
                                             <td class="text-nowrap">{{ usuario.email }}</td>
                                             <td>{{ usuario.nombre }}</td>
                                             <td>
 
-                                                <select [(ngModel)]="usuario.role" class="form-control" name="role">
-                                          <option value="ADMIN_ROLE">ADMIN_ROLE</option>
-                                          <option value="USER_ROLE">USER_ROLE</option>
+                                                <select [(ngModel)]="usuario.rol" class="form-control" name="role">
+                                          <option value="ADMIN">ADMIN</option>
+                                          <option value="USER">USER</option>
                                         </select>
 
                                             </td>
                                             <td>
-                                                <span *ngIf="usuario.google" class="badge badge-danger">Google</span>
-                                                <span *ngIf="!usuario.google" class="badge badge-info">Normal</span>
+                                                <span *ngIf="usuario.google_auth == '1'" class="badge badge-danger">Google</span>
+                                                <span *ngIf="usuario.google_auth == '0'" class="badge badge-info">Normal</span>
                                             </td>
                                             <td>
                                                 <button (click)="guardarUsuario( usuario )" type="button" name="button" class="btn btn-primary">

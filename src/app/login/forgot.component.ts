@@ -16,6 +16,7 @@ import { UsuarioService } from '../services/service.index';
 export class ForgotComponent implements OnInit {
 
   forma: FormGroup;
+  cargando: boolean = false;
 
   constructor(public router: Router, public _usuarioService: UsuarioService) {
   }
@@ -27,9 +28,13 @@ export class ForgotComponent implements OnInit {
   }
 
   recuperarPassword(){
+    this.cargando = true;
     // Se invoca al servicio para enviar el token al correo registrado
     this._usuarioService.forgotPassword(this.forma.value.correo)
-      .subscribe( correcto => this.router.navigate(['/login'])  );
+      .subscribe( (correcto) =>{
+        this.cargando = false;
+        this.router.navigate(['/login']);
+      });
   }
 
   regresarLogin(){

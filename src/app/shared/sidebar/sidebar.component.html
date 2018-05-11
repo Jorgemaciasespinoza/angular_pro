@@ -4,16 +4,16 @@
         <ul class="nav">
             <li class="nav-title">Navigation</li>
 
-            <li *ngFor="let menu of _sidebar.menu" class="nav-item nav-dropdown">
+            <li *ngFor="let menu of _usuarioService.menu" class="nav-item nav-dropdown">
                 <a href="#" class="nav-link active" class="nav-link nav-dropdown-toggle">
                     <i [class]="menu.icono"></i> {{ menu.titulo }} <i class="fa fa-caret-left"></i>
                 </a>
 
                 <ul class="nav-dropdown-items">
 
-                    <li *ngFor="let submenu of menu.submenu"class="nav-item">
+                    <li *ngFor="let submenu of menu.sub"class="nav-item">
                         <a routerLinkActive="active" [routerLink]="[submenu.url]" class="nav-link">
-                            <i [class]="submenu.icono"></i> {{ submenu.titulo }}
+                            <i [class]="submenu.icono"></i> {{ submenu.titulo_opcion }}
                         </a>
                     </li>
 

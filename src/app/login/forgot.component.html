@@ -21,8 +21,8 @@
                       </div>
 
                       <div class="card-footer">
-                          <button type="submit" class="btn btn-info btn-block">
-                            <i class="fas fa-key"></i>&nbsp; &nbsp;Continuar...
+                          <button type="submit" class="btn btn-info btn-block" [disabled]="cargando">
+                            <i *ngIf="!cargando" class="fas fa-key"></i> <i *ngIf="cargando" class="fas fa-spinner fa-spin fa-3x"></i> Continuar...
                           </button>
                       </div>
 

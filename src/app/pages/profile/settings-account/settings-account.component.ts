@@ -42,7 +42,7 @@ export class SettingsAccountComponent implements OnInit {
       this.usuario.password = this.forma.value.password;
     }
 
-    if ( !this.usuario.google ){
+    if ( this.usuario.google_auth === '0'){
       this.usuario.email = this.forma.value.email;
     }
 

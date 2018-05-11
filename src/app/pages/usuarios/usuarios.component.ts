@@ -87,7 +87,7 @@ export class UsuariosComponent implements OnInit {
 
   borrarUsuario(usuario: Usuario){
 
-    if ( usuario._id === this._usuarioService.usuario._id){
+    if ( usuario.pk_usuario === this._usuarioService.usuario.pk_usuario){
       swal('Error', 'No puedes eliminar tu propio usuario', 'error');
       return;
     }
@@ -101,7 +101,7 @@ export class UsuariosComponent implements OnInit {
     .then( borrar  => {
 
       if (borrar) {
-        this._usuarioService.borrarUsuario(usuario._id)
+        this._usuarioService.borrarUsuario(usuario.pk_usuario)
         .subscribe( borrado =>{
           this.cargarUsuarios();
         });

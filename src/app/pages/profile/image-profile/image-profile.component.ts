@@ -14,6 +14,8 @@ export class ImageProfileComponent implements OnInit {
   imagenSubir: File;
   imagenTemp: string;
 
+  cargando: boolean = false;
+
   constructor(public _usuarioService: UsuarioService) {
       this.usuario = this._usuarioService.usuario;
   }
@@ -44,7 +46,9 @@ export class ImageProfileComponent implements OnInit {
   }
 
   cambiarImagen(){
-    this._usuarioService.cambiarImagen( this.imagenSubir, this.usuario._id );
+    this.cargando = true;
+    this._usuarioService.cambiarImagen( this.imagenSubir, this.usuario.pk_usuario );
+    this.cargando = false;
   }
 
 }
