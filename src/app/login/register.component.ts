@@ -56,6 +56,11 @@ export class RegisterComponent implements OnInit {
 
 
   registrarUsuario() {
+
+    if (this.forma.invalid){
+      return;
+    }
+
     let usuario = new Usuario(
       this.forma.value.nombre,
       this.forma.value.correo,

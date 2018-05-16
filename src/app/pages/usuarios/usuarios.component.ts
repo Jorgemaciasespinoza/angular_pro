@@ -19,6 +19,12 @@ export class UsuariosComponent implements OnInit {
   actual: number = 0;
   cargando: boolean = true;
 
+  public data: any[];
+  public filterQuery = "";
+  public rowsOnPage = 3;
+  public sortBy = "email";
+  public sortOrder = "asc";
+
   constructor(
     public _usuarioService: UsuarioService,
     public _modalUploadService: ModalUploadService
@@ -40,7 +46,7 @@ export class UsuariosComponent implements OnInit {
       this.totalRegistros = resp.total;
       this.actual = resp.posicion;
       this.usuarios = resp.usuarios;
-
+      this.data = resp.usuarios;
       this.cargando = false;
     });
   }
@@ -75,7 +81,8 @@ export class UsuariosComponent implements OnInit {
     this._usuarioService.buscarUsuarios( termino )
     .subscribe( (resp: any) => {
       this.usuarios = resp.usuarios;
-      this.actual = resp.posicion;
+      this.data = resp.usuarios;
+
       this.cargando = false;
     });
   }

@@ -31,6 +31,7 @@ export class SettingsAccountComponent implements OnInit {
   }
 
   guardarPerfil(){
+
     this.usuario.nombre = this.forma.value.nombre;
 
     // Se establece a nulo por que el valor es :)

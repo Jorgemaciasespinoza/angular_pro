@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { CommonModule }   from '@angular/common';
-
+import {DataTableModule} from "angular2-datatable";
 // PAGINA PRINCIPAL CONTENEDORA
 import { PagesComponent } from './pages.component';
 
@@ -52,7 +52,8 @@ import { PipesModule } from '../pipes/pipes.module';
     PipesModule,
     FormsModule,
     ReactiveFormsModule,
-    CommonModule
+    CommonModule,
+    DataTableModule
   ]
 })
 export class PagesModule { }

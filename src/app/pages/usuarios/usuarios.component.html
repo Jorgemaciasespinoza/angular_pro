@@ -1,11 +1,17 @@
+
 <div class="row ">
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <!-- <h5>Usuarios</h5> -->
 
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item " aria-current="page">Mantenimientos</li>
+                  <li class="breadcrumb-item active" aria-current="page">Usuarios</li>
+                </ol>
+              </nav>
+              
             </div>
-
 
             <div class="card-body p-0">
                 <div class="container">
@@ -13,10 +19,9 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <!-- <label for="normal-input" class="form-control-label">Busqueda de usuarios</label> -->
-                                <input #input (keyup)="buscarUsuario( input.value )" id="normal-input" class="form-control" placeholder="Usuarios">
+                                <input #input (keyup)="buscarUsuario( input.value )" id="normal-input" class="form-control" placeholder="Buscar usuario por nombre">
                             </div>
-
+                            <br>
                             <div class="row" *ngIf="cargando">
                                 <div class="col-sm-12">
                                     <div class="text-center">
@@ -32,52 +37,66 @@
                             </div>
 
                             <div class="table-responsive" *ngIf="!cargando">
-                                <h6>Usuarios registrados (<small>  {{ actual }} de {{ totalRegistros }} </small>)</h6>
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Imagen</th>
-                                            <th>Correo</th>
-                                            <th>Nombre</th>
-                                            <th>Role</th>
-                                            <th>Auth</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let usuario of usuarios">
-                                            <td class="w70">
-                                                <img (click)="mostrarModal( usuario.pk_usuario )" [src]="usuario.imagen | imagen" class="img-50 img-thumbnail pointer">
-                                            </td>
-                                            <td class="text-nowrap">{{ usuario.email }}</td>
-                                            <td>{{ usuario.nombre }}</td>
-                                            <td>
-
-                                                <select [(ngModel)]="usuario.rol" class="form-control" name="role">
+                                <table class="table table-striped" [mfData]="data" #mf="mfDataTable" [mfRowsOnPage]="rowsOnPage">
+                                  <thead>
+                                  <tr>
+                                    <th>
+                                      Imagen
+                                    </th>
+                                    <th>
+                                      <mfDefaultSorter by="email">Correo</mfDefaultSorter>
+                                    </th>
+                                    <th>
+                                      <mfDefaultSorter by="nombre">Nombre</mfDefaultSorter>
+                                    </th>
+                                    <th>
+                                      <mfDefaultSorter by="rol">Rol</mfDefaultSorter>
+                                    </th>
+                                    <th>
+                                      <mfDefaultSorter by="google_auth">Auth</mfDefaultSorter>
+                                    </th>
+                                    <th></th>
+                                  </tr>
+                                  </thead>
+                                  <tbody>
+                                  <tr *ngFor="let usuario of mf.data">
+                                    <td class="w70">
+                                        <img (click)="mostrarModal( usuario.pk_usuario )" [src]="usuario.imagen | imagen" class="img-50 img-thumbnail pointer">
+                                    </td>
+                                    <td>{{usuario.email}}</td>
+                                    <td>{{usuario.nombre}}</td>
+                                    <td>
+                                        <select [(ngModel)]="usuario.rol" class="form-control" name="role">
                                           <option value="ADMIN">ADMIN</option>
                                           <option value="USER">USER</option>
                                         </select>
-
-                                            </td>
-                                            <td>
-                                                <span *ngIf="usuario.google_auth == '1'" class="badge badge-danger">Google</span>
-                                                <span *ngIf="usuario.google_auth == '0'" class="badge badge-info">Normal</span>
-                                            </td>
-                                            <td>
-                                                <button (click)="guardarUsuario( usuario )" type="button" name="button" class="btn btn-primary">
+                                    </td>
+                                    <td>
+                                        <span *ngIf="usuario.google_auth == '1'" class="badge badge-danger">Google</span>
+                                        <span *ngIf="usuario.google_auth == '0'" class="badge badge-info">Normal</span>
+                                    </td>
+                                    <td>
+                                        <button (click)="guardarUsuario( usuario )" type="button"
+                                          name="button" class="btn btn-primary">
                                           <i class="fa fa-save"></i>
                                         </button>
-                                                <button (click)="borrarUsuario( usuario )" type="button" name="button" class="btn btn-danger">
+                                        <button (click)="borrarUsuario( usuario )" type="button"
+                                          name="button" class="btn btn-danger">
                                           <i class="fas fa-trash-alt"></i>
                                         </button>
-
-                                            </td>
-                                        </tr>
-                                    </tbody>
+                                    </td>
+                                  </tr>
+                                  </tbody>
+                                  <tfoot>
+                                  <tr>
+                                    <td colspan="12">
+                                      <mfBootstrapPaginator [rowsOnPageSet]="[3,5,10]"></mfBootstrapPaginator>
+                                    </td>
+                                  </tr>
+                                  </tfoot>
                                 </table>
-                                <br>
-                                <button (click)="cambiarDesde(-5)" type="button" class="btn btn-outline-secondary">Anteriores</button>
-                                <button (click)="cambiarDesde(5)" type="button" class="btn btn-outline-primary">Siguientes</button>
+
+
                             </div>
 
                         </div>

@@ -1,8 +1,5 @@
 import { Component } from '@angular/core';
 
-// INDEX DE LOS SERVICIOS
-import { SidebarService } from './services/service.index';
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',

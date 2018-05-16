@@ -33,6 +33,8 @@ import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs/Observable';
 
+declare function init_sidebar();
+
 @Injectable()
 export class UsuarioService {
 
@@ -139,12 +141,13 @@ export class UsuarioService {
     guardarStorage( id: string, token: string, usuario: Usuario ) {
 
       localStorage.setItem('token', token );
-
+      localStorage.setItem('name', usuario.nombre);
       // Obtiene los datos del usuario en memoria
       this.usuario = usuario;
       this.token = token;
-
-      this.menu = JSON.parse( atob(this.token.split('.')[1])  ).menu;
+      if (this.menu.length === 0){
+        this.menu = JSON.parse( atob(this.token.split('.')[1])  ).menu;
+      }
     }
 
 
@@ -163,6 +166,8 @@ export class UsuarioService {
     if ( localStorage.getItem('token')) {
       this.token = localStorage.getItem('token');
       this.usuario = JSON.parse( atob(this.token.split('.')[1])  ).usuario;
+      this.usuario.nombre = localStorage.getItem('name');
+      console.log(this.usuario);
       this.menu = JSON.parse( atob(this.token.split('.')[1])  ).menu;
     } else {
       this.token = '';
@@ -179,10 +184,10 @@ export class UsuarioService {
   logout() {
     this.usuario = null;
     this.token = '';
+    this.menu = [];
 
     localStorage.removeItem('token');
-    localStorage.removeItem('usuario');
-    localStorage.removeItem('id');
+    localStorage.removeItem('name');
 
     this.router.navigate(['/login']);
   }
@@ -254,6 +259,7 @@ export class UsuarioService {
 
 
   actualizarUsuario( usuario: Usuario ){
+
       let url = URL_SERVICIOS + '/usuario/'+ usuario.pk_usuario + '?token='+this.token;
 
       return this.http.put( url, usuario )
@@ -261,9 +267,13 @@ export class UsuarioService {
 
             if ( usuario.pk_usuario === this.usuario.pk_usuario){
               let usuarioLocal: Usuario = resp.usuario;
+              console.log(usuarioLocal.pk_usuario);
+              console.log(this.token);
+              console.log(usuarioLocal);
               this.guardarStorage( usuarioLocal.pk_usuario, this.token, usuarioLocal);
             }
 
+            // init_sidebar();
             swal('Actualizar usuario','Se actualizo el usuario correctamente', 'success');
             return resp;
 
@@ -278,13 +288,13 @@ export class UsuarioService {
   cambiarImagen(archivo: File, id: string){
     this._subirArchivoService.subirArchivo(archivo, 'usuarios', id)
     .then( ( resp: any ) =>{
-      console.log(resp);
+
+      console.log(this.menu);
       this.usuario.imagen = resp.imagen;
       this.guardarStorage(id, this.token, this.usuario);
 
       swal('Imagen',
       'Se actualizo correctamente la imagen', 'success');
-
     }).catch( resp =>{
 
       swal('Imagen',
